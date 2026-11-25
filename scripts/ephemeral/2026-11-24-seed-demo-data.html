@@ -1,0 +1,54 @@
+<!doctype html>
+<!--
+  2026-11-24 — Prospector 5.5 (Claude Opus 5.5).
+  Purpose: smoke-test the built app WITH data, headlessly. The unit tests cover the pure logic;
+  this checks the React pages (TanStack Table v9 rows, recharts Sankey, résumé page) actually
+  render populated state without throwing — something `vite build` cannot tell us.
+
+  Usage (from app/):
+    npm run build && cp ../scripts/ephemeral/2026-11-24-seed-demo-data.html dist/seed.html
+    npx vite preview --port 4317
+    chrome --headless=new --user-data-dir=<dir> --dump-dom http://localhost:4317/job-search-harness/seed.html
+    chrome --headless=new --user-data-dir=<same dir> --dump-dom 'http://localhost:4317/job-search-harness/#/tracker'
+  The shared --user-data-dir is what carries localStorage from the seed page to the app.
+  Demo data only — fictional companies, no personal information.
+
+  OUTCOME (2026-11-24): all six routes rendered with data. Tracker showed 5 rows with status
+  dropdowns; Score showed 67 with "kafka" missing; Insights drew 7 Sankey nodes/links — but with
+  NO labels (recharts' default node is a bare rect). Fixed with a custom FunnelNode in
+  InsightsPage.tsx; re-run showed "applied (5) screen (2) interview (2) rejected (2) offer (1)
+  awaiting (1) ghosted (1)", matching the seed exactly.
+-->
+<meta charset="utf-8" />
+<script>
+  const now = Date.now()
+  const iso = (daysAgo) => new Date(now - daysAgo * 86400000).toISOString()
+  const job = (id, title, company, over = {}) => ({
+    id, title, company, location: 'Philadelphia, PA', remote: 'hybrid', role: 'Backend',
+    payPeriod: 'year', currency: 'USD', firstSeenAt: iso(1), url: 'https://example.com/' + id,
+    source: 'manual', description: 'Python Kubernetes PostgreSQL. Python services. Kubernetes everywhere. Kafka Kafka.', ...over,
+  })
+  const app = (id, company, status, history, over = {}) => ({
+    id, company, title: 'Backend Engineer', location: 'Remote', url: '', appliedAt: iso(20), status,
+    history: history.map((s, i) => ({ status: s, at: iso(20 - i), via: 'manual' })), referral: false, notes: '', ...over,
+  })
+  localStorage.setItem('jsh:v1:jobs', JSON.stringify([
+    job('j1', 'Backend Engineer', 'Initech', { payMin: 140000, payMax: 180000 }),
+    job('j2', 'Data Engineer', 'Globex', { postedAt: iso(12), firstSeenAt: iso(12), role: 'Data' }),
+    job('j3', 'Contract SWE', 'Hooli', { payMin: 70, payMax: 85, payPeriod: 'hour', remote: 'remote' }),
+  ]))
+  localStorage.setItem('jsh:v1:applications', JSON.stringify([
+    app('a1', 'Acme', 'rejected', ['applied', 'screen', 'interview', 'rejected'], { matchScore: 72, daysSincePosted: 2 }),
+    app('a2', 'Umbrella', 'rejected', ['applied', 'rejected'], { matchScore: 40, daysSincePosted: 25 }),
+    app('a3', 'Stark', 'offer', ['applied', 'screen', 'interview', 'offer'], { matchScore: 81, daysSincePosted: 1, referral: true }),
+    app('a4', 'Wayne', 'applied', ['applied']),
+    app('a5', 'Wonka, Inc.', 'ghosted', ['applied', 'ghosted'], { notes: 'said "great fit"' }),
+  ]))
+  localStorage.setItem('jsh:v1:resumes', JSON.stringify([{
+    id: 'r1', label: 'Main', updatedAt: iso(0),
+    basics: { name: 'Demo Person', email: 'demo@example.com', phone: '', location: 'Philadelphia, PA', links: ['github.com/demo'] },
+    summary: 'Backend engineer.', experience: [{ company: 'Acme', title: 'SWE', location: '', start: '2023-06', end: '', bullets: ['Built Python services on Kubernetes'] }],
+    education: [], projects: [], skills: [{ group: 'Languages', items: ['Python', 'SQL'] }],
+  }]))
+  document.write('SEEDED')
+</script>
