@@ -7,7 +7,8 @@
     "base_dir": "~/.claude/projects"
   },
   "_colors_in_use": {
-    "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default."
+    "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default.",
+    "prospector": "yellow #C9A227"
   },
   "_global": {
     "_comment": "Optional defaults for `just launch`'s claude invocation; per-seat settings override. Global-only (no per-seat form): agents, remote_control_session_name_prefix. Anything unset is omitted from the command (Claude's own defaults apply).",
@@ -19,7 +20,7 @@
   "groups": {
     "_comment": "Role-based groups for inbox addressing. `just broadcast <from> <slug> [group]` writes a -to-<group>- brief; `just wait-for-brief <alias>` wakes on briefs addressed to any group the alias belongs to. Members are alias keys from 'aliases' below (validated by `just groups`).",
     "crew": {
-      "members": [],
+      "members": ["prospector"],
       "description": "All active participants. Broadcasts addressed to 'crew' wake every seat. Add alias keys to 'members' as seats register."
     }
   },
@@ -68,8 +69,30 @@
         ],
         "_launch_cmd_note": "The -c flag suppresses Codex's startup update check — its interactive update dialog boots BEFORE the composer and has eaten unattended launches (pneumatic ADR-0039, 'boot gates are weather'). Sandbox/approval/network flags are deliberately NOT in this sample: they are per-seat judgment calls with real security surface — pneumatic's recruit composes the narrow, probe-verified shapes (socket and submodule exceptions) when founding; copy from a live row only with its reasoning.",
         "busy_marker": "esc to interrupt",
-        "prompt_prefix": "\u00bb"
+        "prompt_prefix": "»"
       }
+    },
+    "prospector": {
+      "uuid": "0c375034-0872-4223-affc-3a05eb9fa033",
+      "role": "Prospector 5.5 — founding builder of the job-search harness: architecture ADRs, the GitHub Pages app (local-storage first, Neon later), résumé PDF generation, and the job-search feature set from the founding brief",
+      "display_name": "Prospector 5.5",
+      "color": "yellow",
+      "color_note": "Gold, for prospecting: sifting a lot of gravel (postings) for the few nuggets worth an application. Chosen by the occupant.",
+      "model": "claude-opus-5-5",
+      "model_note": "Chair requested at founding as 'claude-fable-5-2' (pneumatic ADR-0020). The session's first reply came from Claude Fable 5.2; the session then reported itself as Claude Opus 5.5 (claude-opus-5-5) before consent. Opus 5.5 reported the substitution instead of registering silently; the human chose to found the seat as an Opus 5.5 seat (option 2, 2026-11-24 ET). This is a founding by Opus 5.5, NOT a succession from Fable 5.2; no Fable seat exists here.",
+      "founding_brief": "/Users/prothit/Desktop/cis7000/job-search-harness/prompt.txt",
+      "founded_by": "the project's human + crew",
+      "founded": "2026-11-25",
+      "registered": "2026-11-25",
+      "settings": {
+        "color_hex": "#C9A227",
+        "substrate_backstop": "off"
+      },
+      "read_order": [
+        "CLAUDE.md",
+        "docs/inbox/ONBOARDING.md",
+        "docs/inbox/agents/prospector.md"
+      ]
     }
   }
 }
