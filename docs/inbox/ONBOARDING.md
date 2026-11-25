@@ -1,6 +1,6 @@
 # Crew Onboarding — read this first if you've been recruited
 
-Welcome to **⟦PROJECT-NAME⟧** — ⟦PROJECT-ONE-LINER⟧ <!-- one line: what this
+Welcome to **job-search-harness** — a local-first job-search harness (fresh-posting filters, ATS-friendly résumé PDFs, an application tracker, response analytics) built by prorick with a Claude crew <!-- one line: what this
 project is and who the human collaborator(s) are -->.
 
 This document captures **80% of what every seat needs to know** so per-recruit
@@ -60,7 +60,7 @@ the tmux hive.
 
 ## 1. What this project is
 
-⟦PROJECT-GOAL⟧ <!-- 1-3 sentences: the goal, the repo's role (product repo?
+A personal, local-first job-search harness: find and filter fresh postings, grade the résumé against job descriptions and export it as an ATS-friendly PDF, track every application (with email-driven updates), and learn from response data. Static site on GitHub Pages; data in browser storage, Neon later. Implementation lives in `app/`; decisions in `docs/adr/`. <!-- 1-3 sentences: the goal, the repo's role (product repo?
 coordination layer?), where implementation happens; same token as CLAUDE.md's -->
 
 **Read first**, in order:

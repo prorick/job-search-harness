@@ -10,10 +10,10 @@
 > instructions were sitting exactly where their audience could not see them.
 > Delete this block when instantiation is done.)*
 
-- **Project**: ⟦PROJECT-NAME⟧
-- **Human**: ⟦HUMANS⟧
-- **AI**: ⟦AI-SEATS⟧ <!-- with the crew layer, the roster lives in docs/inbox/agent-sessions.json; name the coordinator seat here -->
-- **Last Updated**: ⟦LAST-UPDATED⟧
+- **Project**: job-search-harness
+- **Human**: prorick (GitHub `prorick`)
+- **AI**: Prospector 5.5 (Claude Opus 5.5, alias `prospector`) — founding seat and coordinator; full roster in `docs/inbox/agent-sessions.json` <!-- with the crew layer, the roster lives in docs/inbox/agent-sessions.json; name the coordinator seat here -->
+- **Last Updated**: 2026-11-24
 
 ---
 
@@ -98,15 +98,15 @@ Tests should:
 **RUN THIS PROJECT'S VERIFICATION GATE BEFORE EVERY COMMIT**
 
 Before serving any change:
-1. Run the project's verification gate: ⟦VERIFICATION-GATE⟧ <!-- test suite, build, linter, or a combination; e.g. `npm test`, `uv run pytest`, `hugo && bin/check` -->
+1. Run the project's verification gate: `npm --prefix app run check` <!-- test suite, build, linter, or a combination; e.g. `npm test`, `uv run pytest`, `hugo && bin/check` -->
 2. Fix any failures before committing
 3. Never serve changes with a failing gate
 
-**Why**: ⟦GATE-WHY⟧ <!-- state what this project's gate actually catches — real classes of bug, real numbers if you have them. A directive that names a real gate gets followed; an unfollowable one teaches every seat that directives are decorative, and that lesson generalizes. -->
+**Why**: it runs the TypeScript 7 strict typecheck, the Vitest suite (29 tests on 2026-11-24: storage quarantine, pay/recency filters, résumé scoring, tracker history, email classification, response estimates, a multi-page PDF render) and the production build. On founding day a deliberate mutation check confirmed the suite catches real bugs (dropping hourly→annual pay conversion; misordering rejection vs. interview email rules), and the build catches broken imports that tests miss — which on GitHub Pages would ship a blank page. CI runs the same command (`.github/workflows/pages.yml`) and refuses to deploy on red. <!-- state what this project's gate actually catches — real classes of bug, real numbers if you have them. A directive that names a real gate gets followed; an unfollowable one teaches every seat that directives are decorative, and that lesson generalizes. -->
 
 **Process**:
 ```bash
-⟦VERIFICATION-GATE⟧            # Must be green before commit
+npm --prefix app run check     # Must be green before commit
 git add <explicit paths>       # never -A: stage by path, commit by pathspec — see CONVENTIONS.md, shared-worktree awareness
 git commit -m "..." -- <paths>
 ```
@@ -256,13 +256,19 @@ If the script was successfully used, append as comments how, and what the outcom
 ## Project Context
 
 ### What we're building:
-⟦PROJECT-GOAL⟧ <!-- 1-3 sentences; same token as ONBOARDING's — one text serves both -->
+A personal, local-first job-search harness: find and filter fresh postings, grade the résumé against job descriptions and export it as an ATS-friendly PDF, track every application (with email-driven updates), and learn from response data. Static site on GitHub Pages; data in browser storage, Neon later. Implementation lives in `app/`; decisions in `docs/adr/`. <!-- 1-3 sentences; same token as ONBOARDING's — one text serves both -->
 
 ### Current focus:
-⟦CURRENT-FOCUS⟧
+Founding (2026-11-24): the MVP app exists in `app/`; 15 open questions across ADR-0001…0007 await the human — QST-REPO-VISIBILITY (ADR-0001) and QST-TARGETS / QST-JOB-SOURCE (ADR-0003) unblock the most.
 
 ### Key decisions made:
-*(List ADRs here as they land, e.g. `- Auth approach — see docs/adr/0001-*.md`. Empty at birth is healthy.)*
+- Architecture: static Vite/React/TS app in `app/`, GitHub Pages, local-first validated storage with a Neon path — see `docs/adr/0001-*.md`
+- Résumé schema + `@react-pdf/renderer` single-column PDF — see `docs/adr/0002-*.md`
+- Job filtering and recency (sourcing still open) — see `docs/adr/0003-*.md`
+- Deterministic keyword score + ATS checks (LLM layer open) — see `docs/adr/0004-*.md`
+- Reddit intel as link-out searches — see `docs/adr/0005-*.md`
+- Tracker with status history, CSV, email suggestions, funnel — see `docs/adr/0006-*.md`
+- Beta-Binomial response estimate with visible uncertainty — see `docs/adr/0007-*.md`
 
 ### Open questions:
 ```bash
