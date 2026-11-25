@@ -3,7 +3,7 @@
 # Architecture: static GitHub Pages app with local-first storage and a Neon path
 
 - **Date**: 2026-11-24
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Partially Implemented
 - **Deciders**: prorick (human), Prospector 5.5 (Claude Opus 5.5)
 
@@ -43,7 +43,7 @@
 ## Questions
 
 ### QST-REPO-VISIBILITY: The brief asked for a private repo; `prorick/job-search-harness` is public. Which do you want?
-- Status: unanswered
+- Status: answered
 - Why asking: `gh repo view` reports `visibility: PUBLIC`. On a personal GitHub Free account, GitHub Pages can only publish from a **public** repo; Pages from a private repo needs GitHub Pro (paid). The app as built keeps all personal data in your browser, so the public code itself reveals nothing personal — *but* ADR-0003's recommended job-fetching Action would publish your company watchlist, and anything you later commit (a résumé JSON, notes) would be world-readable. I did not change visibility: it's your account and an outward-facing change.
 - Need: pick a letter (or override — any shape answers)
 
@@ -58,7 +58,7 @@ Options:
 **C — private-elsewhere.** *Rationale*: your brief said "private" before it said anything else, and ADR-0003's most useful job source (a scheduled watchlist fetch) naturally commits data that reveals where you're applying; C keeps both the code and that data private at zero cost, and the app is host-agnostic (`app/vite.config.ts` reads `BASE_PATH`). A is fine if you never want the Action-fetched jobs. *Confidence*: 0.6 — because it depends on how much you mind a public watchlist and whether "GitHub Pages" was a requirement or just the first host that came to mind. *If wrong*: if GitHub Pages specifically is the requirement (e.g. a course deliverable), flip to **A** with the watchlist kept out of the repo, or **B** if you'll pay.
 
 **ANS:** (by prorick)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+A is fine
 
 ---
 
@@ -118,6 +118,7 @@ A personal job-search tool, hosted as static files, with personal data that must
 **Trade-offs accepted**: no multi-device sync; ~750 KB main bundle (React + recharts + TanStack), PDF renderer lazy-loaded (~1.2 MB) only when you export a PDF.
 
 ### Consequences
+- **Repo stays public; hosting is GitHub Pages** (QST-REPO-VISIBILITY = A). Standing rule that follows: **no personal data is ever committed** — no résumé JSON, no application history, no company watchlist. If ADR-0003's watchlist Action is built, the watchlist must live outside the repo (browser storage or a private gist) and the published `jobs.json` must be understood as public.
 - Anything needing a secret (LLM key, OAuth client secret, Reddit app) must run in the browser with *your* credentials, in Actions, or wait for QST-NEON-PATH B.
 - The verification gate for this repo is `npm --prefix app run check` (CLAUDE.md, Fifth Directive).
 
@@ -125,7 +126,7 @@ A personal job-search tool, hosted as static files, with personal data that must
 
 ## Open Follow-ups
 
-- [ ] Unverified: the Pages deploy has not run yet — it needs Pages enabled with "GitHub Actions" as the source (repo Settings → Pages), pending QST-REPO-VISIBILITY.
+- [x] ~~Unverified: the Pages deploy has not run yet~~ — verified 2026-11-24: Pages enabled (source: GitHub Actions), run 45524101788 green (build + deploy), https://prorick.github.io/job-search-harness/ serves the app and its assets under the `/job-search-harness/` base.
 - [ ] Concern: localStorage is ~5 MB per origin. Pasted job descriptions are the largest records; at ~5 KB each that's ~1,000 jobs. Move to IndexedDB if we approach it.
 - [ ] Future task: `kintsugi.yaml` is present without `kintsugi.lock` — template updates won't reach this repo until someone runs `kintsugi adopt`.
 
@@ -135,7 +136,9 @@ A personal job-search tool, hosted as static files, with personal data that must
 
 - [x] Scaffold `app/` with libraries and storage layer — Owner: Prospector 5.5
 - [x] Gated Pages workflow — Owner: Prospector 5.5
-- [ ] Answer QST-REPO-VISIBILITY, then enable Pages (or the alternative host) — Owner: prorick
+- [x] Answer QST-REPO-VISIBILITY (A — public-code) — Owner: prorick
+- [x] Enable Pages and deploy — Owner: Prospector 5.5
+- [ ] Fill `⟦HUMAN-NAME⟧` in `.vscode/settings.json` — the ADR Manager signed the first answer with the raw placeholder (corrected by hand in Iteration 2) — Owner: prorick (file holds their uncommitted edits)
 - [ ] Implement backup nudge per QST-BACKUP — Owner: Prospector 5.5
 
 ---
@@ -147,6 +150,12 @@ A personal job-search tool, hosted as static files, with personal data that must
 - Contributors: Prospector 5.5 (Claude Opus 5.5)
 - Changes: initial draft; stack scaffolded and tested (29 tests) alongside
 - Outcome: `Draft → Partially Implemented` (architecture built; hosting/visibility pending answers)
+
+### Iteration 2 (2026-11-24)
+- Trigger: prorick answered QST-REPO-VISIBILITY: "A is fine"
+- Contributors: prorick, Prospector 5.5 (Claude Opus 5.5)
+- Changes: recorded the no-personal-data-in-repo rule as a consequence; Pages enabled and first deploy verified; answer byline corrected from `⟦HUMAN-NAME⟧` (ADR Manager's unfilled placeholder) to `prorick` — the answer text itself is untouched. Note the recommendation was C and the human chose A: the falsifier named "GitHub Pages specifically is the requirement", which the brief's wording supports.
+- Outcome: status unchanged (Partially Implemented — QST-NEON-PATH and QST-BACKUP still open)
 
 ---
 

@@ -109,6 +109,7 @@ Options:
 
 ## Open Follow-ups
 
+- [ ] Constraint from ADR-0001 QST-REPO-VISIBILITY = A (public repo): if QST-JOB-SOURCE B is built, the watchlist must not be committed, and the published `jobs.json` is public.
 - [ ] Doubt: employers "refresh" old postings so they look new on aggregators. Only a first-seen clock that *we* control (QST-JOB-SOURCE B) detects this.
 - [ ] Future task: de-duplicate the same job seen via two sources (match on company + normalized title + location).
 
