@@ -1,0 +1,35 @@
+Hello,
+
+I would like you to create a "job search harness" as a private GitHub repository on my account (check if gh is installed, if not installed it through homebrew if on macOS or figure it out if on Windows, and help me with WSL).
+
+We are going to use the
+
+https://github.com/ADRs4AI/human-ai-collaboration-template-A
+
+please create a repo based on this template, called "job-search-harness".
+
+You can do:
+
+https://jlumbroso.github.io/adrs4ai-getting-started/
+
+You will need to configure yourself as a named session in agent-sessions.json — you need to pick a name and color as you will see in the ONBOARDING.md (once the repo is cloned)
+
+You can do this (if it works, it will help):
+/plugin marketplace add ADRs4AI/plugins
+/plugin install adr@adrs4ai
+
+We want the harness to be deployed to GitHub Pages, and to use local storage as a storage, for now, with possibility to later expand to Neon. We will want to collect information and generate PDF of my résumé, so load the TypeScript libraries and configure the template, define the ADRs, you will see.
+
+
+Actually, forget some of what I have said, we are already in a repo made from the template, so take it from there.
+
+some features that would be nice:
+Ability to filter out jobs based on title/role/pay/location
+See which roles have been out recently. Newly posted roles tend to have the best outcomes
+Grade your resume based on job description 
+Give feedback on what changes you can make to pass AST Resume screening
+Get some sort of feedback from reddit on prior hiring/interview process for that particular company/role
+Have a spreadsheet tracker of every job you clicked apply to
+Ability to see emails to update the tracker if you move forward or get rejected
+Create a visual graph of all the places you applied to.
+Compare roles you were able to get a response to and use that data to get a likely response analysis on the new company you are applying to. 
